@@ -1358,6 +1358,74 @@ $(document).ready(function () {
 
     });
 
+    // Create shareable URL
+    $("#share-button").on('click', function(e) {
+      e.preventDefault();
+
+      // grab parameter values from the form
+      // the variables and the for-loop below are copied from the plot submit button
+      // make a reusable function to grab these values??
+      var nbhoodVal = $('#neighborhoodselect').val();
+      var yearStart = $('#yearstart').val();
+      var yearEnd = $('#yearend').val();
+      var bounds = map.getBounds().toBBoxString();
+      var formVars = [];
+      $("#sidebar input:checked").each(function() {
+        formVars.push($(this).val());
+      });
+      for (var i = 0; i < formVars.length; i++) {
+        switch (formVars[i]) {
+          case "permits":
+            // Restricting date selection to full year
+            var needPermits = true;
+            break;
+          case "crimes":
+            if (parseInt(yearStart) < 2004) {
+              yearStart = "2004";
+            }
+            var yearRange = yearsInRange(yearStart, yearEnd);
+            if (yearRange.length == 0) {
+              console.log('Year range is zero!');
+            }
+            $('#crimetotal').html('');
+            getCrimesYear(nbhoodVal, yearRange);
+            break;
+          case "demolitions":
+            var needDemolitions = true;
+            break;
+        }
+      }
+
+
+      // create query string by making an object to be passed into jQuery params function
+      var params = {
+        type: "residential",
+        startdate: yearStart + '-01-01',
+        enddate: yearEnd + '-12-31',
+        neighborhood: nbhoodVal
+      }
+
+      if (needPermits == true) {
+        params["permits"] = true;
+      }
+
+      if (needDemolitions == true) {
+        params["demolitions"] = true;
+      }
+
+      var queryString = $.param(params);
+
+
+      // update URL to show query string
+      //window.location.search = queryString;
+      // var shareableURL = window.location
+
+      var shareableURL = window.location + "?" + queryString;
+      $("#share-url").text(shareableURL);
+
+    });
+
+
     // Initialize select box with neighborhoods
     getNbhoodList();
 

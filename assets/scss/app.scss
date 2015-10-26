@@ -280,14 +280,17 @@ background-color: none;
   text-align: center;
 }
 
+
 input[type="radio"],
 input[type="checkbox"] {
   margin: 0;
 }
 
+
 .dropdown-menu i {
     width: 17px;
 }
+
 
 .form-control {
     display: block;
@@ -380,6 +383,7 @@ z-index: 3000;
 #metadata i {
 font-size: 100px;
 }
+
 
 #metadata a:hover {
   color: #2198FF;
@@ -521,6 +525,7 @@ list-style: none;
     text-align: left;
     width: 580px;
 }
+
 
 #disclaimer p {
     margin: 27px auto 38px;
@@ -688,6 +693,7 @@ output {
     margin: 0px auto;
   }
 }
+
 
 @media (max-width: 992px){
   .navbar .navbar-brand {

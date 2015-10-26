@@ -646,7 +646,7 @@
 
       // grab parameter values from the form
       // the variables and the for-loop below are copied from the plot submit button
-      // TODO: make a reusable function to grab these values
+      // TODO: make a reusable function to grab these values?
       var nbhoodVal = $('#neighborhoodselect').val();
       var yearStart = $('#yearstart').val();
       var yearEnd = $('#yearend').val();
@@ -697,10 +697,11 @@
       var queryString = $.param(params);
 
       // update URL to show query string
-      // TODO:  figure out how to update the string without it reloading the page
+      // TODO:  update the string without reloading the page as parameters change
       //window.location.search = queryString;
 
       var shareableURL = window.location + "?" + queryString;
+      // TODO: create a better way to provide the shareable URL
       $("#share-url").text(shareableURL);
 
     });

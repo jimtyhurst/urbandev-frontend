@@ -1358,13 +1358,22 @@ $(document).ready(function () {
 
     });
 
-    // Create shareable URL
+    // Initialize select box with neighborhoods
+    getNbhoodList();
+
+  });
+
+
+   //----------QUERY STRING CREATION AND PARSING OF URL PARAMETERS---------------
+
+
+   // Create shareable URL
     $("#share-button").on('click', function(e) {
       e.preventDefault();
 
       // grab parameter values from the form
       // the variables and the for-loop below are copied from the plot submit button
-      // make a reusable function to grab these values??
+      // TODO: make a reusable function to grab these values
       var nbhoodVal = $('#neighborhoodselect').val();
       var yearStart = $('#yearstart').val();
       var yearEnd = $('#yearend').val();
@@ -1396,7 +1405,6 @@ $(document).ready(function () {
         }
       }
 
-
       // create query string by making an object to be passed into jQuery params function
       var params = {
         type: "residential",
@@ -1415,20 +1423,47 @@ $(document).ready(function () {
 
       var queryString = $.param(params);
 
-
       // update URL to show query string
+      // TODO:  figure out how to update the string without it reloading the page
       //window.location.search = queryString;
-      // var shareableURL = window.location
 
       var shareableURL = window.location + "?" + queryString;
       $("#share-url").text(shareableURL);
 
     });
 
+    // Get URL parameters on window load
 
-    // Initialize select box with neighborhoods
-    getNbhoodList();
+  $(window).load(function() {
+    if (window.location.search) {
+      var urlParams;
+      var match,
+          pl     = /\+/g,  // Regex for replacing addition symbol with a space
+          search = /([^&=]+)=?([^&]*)/g,
+          decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+          query  = window.location.search.substring(1);
 
-  });
+      urlParams = {};
+      while (match = search.exec(query))
+         urlParams[decode(match[1])] = decode(match[2]);
+
+      console.log(urlParams);
+
+      // send request
+      // TODO: add request for demolitions and crimes
+      // TODO: figure out why the markers are not plotting
+      // TODO: update the values in the widget
+
+      if (urlParams.permits == "true") {
+        console.log(urlParams.neighborhood);
+        zoomToNeighborhood(urlParams.neighborhood);
+        getPermits(urlParams.startdate, urlParams.enddate, urlParams.neighborhood, urlParams.type, "permits");
+      }
+    }
+
+//    ----- END QUERY STRING CREATION AND PARSING OF URL PARAMETERS---------------
+
+});
+
 
 })();
